@@ -1,9 +1,15 @@
 import * as React from "react";
 
-import { useGlobalState } from "../context/person";
+import { dispatch, useGlobalState } from "../context/person";
+
+const setFirstName = (event: React.FormEvent<HTMLInputElement>) =>
+  dispatch({
+    firstName: event.currentTarget.value,
+    type: "setFirstName"
+  });
 
 const Person = () => {
-  const [value, update] = useGlobalState("firstName");
+  const [value] = useGlobalState("person");
   const { firstName } = value;
 
   return React.useMemo(() => {
@@ -11,17 +17,11 @@ const Person = () => {
       <div>
         <div>
           First Name:
-          <input
-            value={firstName}
-            onChange={event => {
-              const firstName = event.target.value;
-              update(p => ({ ...p, firstName }));
-            }}
-          />
+          <input value={firstName} onChange={setFirstName} />
         </div>
       </div>
     );
-  }, [value]);
+  }, [firstName]);
 };
 
 export default Person;
